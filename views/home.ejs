@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <title>To-do List</title>
+</head>
+<body>
+    <div id="container">
+        <div id="content">
+            <!-- content section starts here -->
+            <div id="heading">
+                <h1><i class="fa-solid fa-list-check"></i>TO-DO List</h1>
+            </div>
+            <div id="list-container">
+                <!-- list container section starts here -->
+                <form action="/create-task" method="post" id="form">
+                    <!-- form to take a new task as input -->
+                    <div id="description-container">
+                        <!-- description container section starts here -->
+                        <p>DESCRIPTION</p>
+                        <input type="text" required name="description" placeholder="Add new Task..">
+                        <!-- description container section ends here -->
+                    </div>
+                    <div id="category-and-due-date-container">
+                        <div id="category-container">
+                            <!-- category container section starts here -->
+                            <p>CATEGORY</p>
+                            <select name="category" id="category">
+                                <option value="Personal" selected>Personal</option>
+                                <option value="Work">Work</option>
+                                <option value="College">College</option>
+                                <option value="Household">Household</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <!-- category container section ends here -->
+                        </div>
+                        <div id="due-date-container">
+                            <!-- due date container section starts here -->
+                            <p>DUE DATE</p>
+                            <input type="date" name="due_date" id="due-date">
+                            <!-- due date container section ends here -->
+                        </div>
+                    </div>
+                    <div id="buttons">
+                        <!-- button section starts here -->
+                        <div>
+                            <button type="submit" id="add-task-button"><i class="fa-solid fa-calendar-plus"></i> Add Task</button>
+                        </div>
+                        <div>
+                            <button type="button" id="delete-task-button"><i class="fa-solid fa-calendar-minus"></i> Delete Task</button>
+                        </div>
+                        <!-- button section ends here -->
+                    </div>
+                    
+                </form>
+                <ul id="list">
+                    <!-- task list section starts here -->
+                    <% for(let i of task_list){%>
+                    <!-- task_list passed from controller -->
+                        <li>
+                            <div id="name-and-due">
+                                <input type="checkbox"  class = "custom-checkbox" name="" <%= i.completed ? "checked" : "" %> id="<%= i._id %>">
+                                <label id="li-label" for="<%= i._id %>"><%= i.description %>
+                                <%if(!i.date){%>
+                                    <p><i class="fa-solid fa-calendar-days"></i> No Due Date</p></label>
+                                <%}else{%>
+                                    <p><i class="fa-solid fa-calendar-days"></i> <%= i.date.getDate() %>/<%= i.date.getMonth()+1 %>/<%= i.date.getFullYear() %></p></label>
+                                <%}%>
+                            </div>
+
+                            <div id="category-and-delete">
+                                <div id="task-category">
+                                    <p><%= i.category %></p>
+                                </div>
+                                <div id="delete-image">
+                                    <a href="/delete-task/<%= i._id %>"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAh1BMVEX/////AAD/WVn/oKD/p6f/5ub/9vb/xcX/kZH/Kir/LS3/VVX/vb3/rKz/1dX/RET/TEz/y8v/s7P/ZGT/9fX/Ozv/Njb/t7f/3Nz/m5v/lZX/hIT/7e3/Ghr/aGj/0ND/Pz//b2//eXn/R0f/6Oj/fX3/Gxv/Dg7/c3P/i4v/goL/IyP/ZmaQsKNcAAAFP0lEQVR4nO2da3OiPBiGiyK2VbRuFVEs4mm12/3/v+/18M5OhztqEkMS6H19dELmuQRCznl6qpBou+xP4zgMw/YVwjCedtNFlUFUx3iafwWSvM1S1+Eqs81eZPUutPquQ1ais1PTO5NMXYctz0zD70SxdB25HINCU/DIZ+Q6eglCfb8jm47r+O+yekjwiOdP6rj3qGAQeF3gRG+PCwaBz98NA3fwRNe1x1VyM4JB4GsN57FS9DuFnx+NgTHBINi5lhERDQ0aevkqmntGT7y41kEio4JBELoWAszewiDYe1fYXGkO7nufcXc0GKSdC+mFwYnlqNtv767V09uujUr0hVH+bm/vXzoSV4Qmnt3Ed1GQa8kOmFioOKo2YkUWe0GIc+nLlyLDrMJ41RE9pH8UrhcpvlYWrQ4HDLBQykBUFHtVO319+DUSNEviamLVYoHhtRSz6GIWq0pi1WOE4Sm31Cdev4j4Fu3HqnnM8V+qIlRNniG4N+U8BMWpR+MZ2MUt/y38Bxp61LOI3RcaHWZo6NHnogXBafSXfdTLUKONjq0TGpokuonoKb19hSgTNBzcu8QEnfb6vTccTpLJ6w2wZfF1K7kYyCN4uZE6mSTF8K2Xfz7WZzXWGem0TfKAY/rbdfRyPGvfwcR16LLotkIENUVP+VCuBV+ozS3UHXNMXYetwEHLcOo6bAUSLUPdOSNO0DLMXEetglZTcu06ahW0mpLNN1y5jloFGtLQf7QMjc2OsYGKYTcZntnUpOl0obgEXcgMJtSpsobIVN/E49V1gYb1N5zQkIbe03zDQsJQMKBeIzY0/BGGgnkVNUJm/oBwjllt6DX+HsoYNv8emlxUYB+Z9uE2O7I+rPMjrTMwwrtpOQIa5cX55795/ne1PuyOgeuNs8EYlLPZuzCB0dAiMH8MYUa4oZV8NLQHDXWhoT1oqAsN7UFDXWhoDxrqQkN7VGUIK5KgVTYelMA56OUUA1g/uyinwJHrzd1I9ICtBCBf6GPdl1N0yimCz3KSdjkF9gzej8SaIWwYgIYwdRmWh2GvEg1pSEMa0pCGNKQhDWlIQxrSkIY0pCENaUhDGtKQhjSkIQ1p6Lsh7GUMI6+2DO+P1eoBI6+/HBlGYGho63YYPachDWlIQxrSkIY0pCENaUhDGtKQhjSk4Q83hH3bm2Y4piENafgP2F6DhjSkIQ0fBc7J8cfQ0GpWGtKQhjSkIQ1rZIht/KYZjuF4vcYZftGQhrKGYeMN2zSkIQ1pSEMa0pCGNNQ2XMCe7I0z/Ph5hkszhu/lfGfeGA5oSEMa0pCG3hrOG28IwVky3MKZPjSk4TVD2MYZDD/uG2rsBW3PMCunWPRLwDyXqJyiD1t+d8opoFqNf5M1Q0vQUBswXJvJV5mUhrr8QMOVmXyVwcMnqzLMzeSrjD3DdzP5KoNHpFZlKHPYZxXggdpVGcocK1wFU2uGSWQmY1Via4YBngBjhZ09QzeFqeAcX0N93ivMGfr1LbCAeXtBgGcSaYFFmKCrpnJSgaDMOeNSQAfQkZ6hv08WaB+f0DvfWMBMlHtQ5Icsy+YnZhfa3whjRb5f/H9+57yfs2y9wqLgjCnBp4U4f+dAR4g+uWsXMQZfFD/PWzf6zTq4thFhtKzburYRYPAtPAHdtc55NV05vlJeu8P49ziCPT7dAuvJH0dULXRHJRXjLazncAeM0ZrBnwe1gkf0wnjtWu3Ml6H1zUJEDSnb5OMKBY/ljevbmBja/vkGnZVLP2Mtwpukc9jNyA6rvr1Ovs7oVxy2LRLG/XShFep/9Fi4XhXtpEkAAAAASUVORK5CYII=" class="delete" data-id="12" /></a>
+                                </div>
+                            </div>
+                            
+                        </li>
+                    <% } %>
+                    <!-- task list section ends here -->
+                </ul>
+                <!-- list container section ends here -->
+            </div>
+            <!-- content section ends here -->
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+</html>
