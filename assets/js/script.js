@@ -1,5 +1,5 @@
 const list = document.getElementById('list');
-const host = process.env.MONGO_URI;
+// const host = process.env.MONGO_URI;
 
 //click listener for toggling task when checked
 list.addEventListener('click', function(event){
