@@ -1,4 +1,5 @@
 const list = document.getElementById('list');
+const host = process.env.MONGO_URI;
 
 //click listener for toggling task when checked
 list.addEventListener('click', function(event){
@@ -6,7 +7,7 @@ list.addEventListener('click', function(event){
     {
         console.log(event.target);
         let a = event.target.id;
-        fetch(`https://todolist-fhu5.onrender.com/?id=${a}`) 
+        fetch(`https://todolist-fhu5.onrender.com/toggle-task/?id=${a}`)  
         .then(function(response) {
             console.log(response);
         }).catch(function (error) {
