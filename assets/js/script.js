@@ -6,7 +6,7 @@ list.addEventListener('click', function(event){
     {
         console.log(event.target);
         let a = event.target.id;
-        fetch(`http://localhost:8000/toggle-task/?id=${a}`)  
+        fetch(`https://todolist-fhu5.onrender.com/?id=${a}`) 
         .then(function(response) {
             console.log(response);
         }).catch(function (error) {
